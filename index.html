@@ -1,0 +1,407 @@
+<title>English Word Bank</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one study column — deck switch, mode switch, filters, then the active view (list / flashcard / quiz). */
+:root {
+  --bg: #eceff3;
+  --surface: #ffffff;
+  --ink: #15202b;
+  --muted: #5a6776;
+  --line: #d5dbe3;
+  --accent: #0d5f73;
+  --accent-ink: #ffffff;
+  --accent-soft: #d9ecf0;
+  --mark: #f3cf55;
+  --good: #1f7a4a;
+  --bad: #b3362f;
+  --display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --body: "Golos Text", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e141b; --surface: #17202a; --ink: #e5ebf1; --muted: #93a1b1; --line: #2a3644;
+    --accent: #5fc3d6; --accent-ink: #0b1a20; --accent-soft: #173a44; --mark: #e2bb3f;
+    --good: #5cc98d; --bad: #f07a70; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e141b; --surface: #17202a; --ink: #e5ebf1; --muted: #93a1b1; --line: #2a3644;
+  --accent: #5fc3d6; --accent-ink: #0b1a20; --accent-soft: #173a44; --mark: #e2bb3f;
+  --good: #5cc98d; --bad: #f07a70; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+}
+.wrap { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+header { display: flex; flex-direction: column; gap: 6px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(1.6rem, 5vw, 2.3rem); line-height: 1.1; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+h1 span { background: linear-gradient(transparent 62%, var(--mark) 62%); padding: 0 2px; }
+.lede { color: var(--muted); margin: 0; max-width: 62ch; }
+
+.decks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.deck { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.deck[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.deck b { font-family: var(--display); font-weight: 500; font-size: 0.95rem; }
+.deck small { color: var(--muted); font-family: var(--mono); font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+.bar { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .3s; }
+
+.controls { display: flex; flex-direction: column; gap: 12px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.seg { display: inline-flex; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 3px; }
+.seg button { border: 0; background: none; padding: 6px 14px; border-radius: 6px; font-weight: 500; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 3px 11px; font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.02em; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.search { flex: 1 1 220px; min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; }
+.toggle { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 0.9rem; }
+.toggle input { accent-color: var(--accent); width: 16px; height: 16px; }
+
+/* list */
+.count { color: var(--muted); font-size: 0.85rem; font-family: var(--mono); }
+.list { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.item { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 11px 14px; border-top: 1px solid var(--line); align-items: start; }
+.item:first-child { border-top: 0; }
+.item.known .w { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--mark); text-decoration-thickness: 2px; }
+.head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; min-width: 0; }
+.w { font-weight: 600; font-size: 1.02rem; }
+.tr { color: var(--ink); opacity: .85; }
+.ex { grid-column: 1 / -1; color: var(--muted); font-style: italic; font-size: 0.9rem; }
+.tag { font-family: var(--mono); font-size: 0.68rem; color: var(--accent); border: 1px solid var(--accent-soft); background: var(--accent-soft); border-radius: 4px; padding: 0 5px; text-transform: uppercase; letter-spacing: 0.04em; }
+.acts { display: flex; gap: 6px; align-items: center; }
+.icon { border: 1px solid var(--line); background: none; border-radius: 6px; width: 30px; height: 30px; display: inline-grid; place-items: center; color: var(--muted); }
+.icon svg { width: 16px; height: 16px; }
+.know { border: 1px solid var(--line); background: none; border-radius: 6px; padding: 3px 9px; font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+.know[aria-pressed="true"] { background: var(--mark); border-color: var(--mark); color: #15202b; }
+.more { align-self: center; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 8px 18px; }
+.empty { padding: 28px 16px; text-align: center; color: var(--muted); }
+
+/* flashcard */
+.stage { display: flex; flex-direction: column; gap: 14px; align-items: stretch; }
+.card { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; min-height: 260px; padding: 28px 22px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; text-align: center; cursor: pointer; user-select: none; }
+.card .big { font-family: var(--display); font-weight: 500; font-size: clamp(1.5rem, 6vw, 2.4rem); line-height: 1.15; overflow-wrap: anywhere; }
+.card .sub { color: var(--muted); max-width: 46ch; }
+.card .hint { position: absolute; bottom: 10px; left: 0; right: 0; font-size: 0.78rem; color: var(--muted); font-family: var(--mono); }
+.card .corner { position: absolute; top: 12px; left: 14px; }
+.card .say { position: absolute; top: 10px; right: 10px; }
+.card.back { background: var(--accent-soft); border-color: var(--accent); }
+.pos { text-align: center; font-family: var(--mono); color: var(--muted); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+.btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 12px; font-weight: 600; }
+.btn.no { color: var(--bad); }
+.btn.yes { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+/* quiz */
+.q { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 16px; }
+.q .prompt { font-family: var(--display); font-weight: 500; font-size: clamp(1.3rem, 5vw, 1.9rem); text-align: center; overflow-wrap: anywhere; }
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.opt { text-align: left; border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 10px 12px; min-width: 0; overflow-wrap: anywhere; }
+.opt.right { border-color: var(--good); box-shadow: inset 0 0 0 1px var(--good); color: var(--good); font-weight: 600; }
+.opt.wrong { border-color: var(--bad); color: var(--bad); text-decoration: line-through; }
+.score { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.82rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.tips { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+.tips h2 { font-family: var(--display); font-weight: 500; font-size: 1rem; margin: 0 0 8px; }
+.tips ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; color: var(--muted); }
+.tips b { color: var(--ink); font-weight: 600; }
+
+@media (max-width: 520px) {
+  .decks { grid-template-columns: 1fr; }
+  .opts { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .bar i { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>English <span>Word Bank</span></h1>
+    <p class="lede">Academic Word List — 570 самых частых слов научных и учебных текстов (без бытовой лексики), и частотные фразовые глаголы. Отмечайте выученное: прогресс сохраняется в этом браузере.</p>
+  </header>
+
+  <div class="decks" id="decks">
+    <button class="deck" id="deck-awl" data-deck="awl" aria-pressed="true">
+      <b>Academic Word List</b>
+      <small id="stat-awl">0 / 570 выучено</small>
+      <div class="bar"><i id="bar-awl"></i></div>
+    </button>
+    <button class="deck" id="deck-pv" data-deck="pv" aria-pressed="false">
+      <b>Phrasal Verbs</b>
+      <small id="stat-pv">0 выучено</small>
+      <div class="bar"><i id="bar-pv"></i></div>
+    </button>
+  </div>
+
+  <div class="controls">
+    <div class="row">
+      <div class="seg" id="modes" role="group" aria-label="Режим">
+        <button id="mode-list" data-mode="list" aria-pressed="true">Список</button>
+        <button id="mode-cards" data-mode="cards" aria-pressed="false">Карточки</button>
+        <button id="mode-quiz" data-mode="quiz" aria-pressed="false">Тест</button>
+      </div>
+      <div class="seg" id="dirs" role="group" aria-label="Направление">
+        <button id="dir-en" data-dir="en" aria-pressed="true">EN → RU</button>
+        <button id="dir-ru" data-dir="ru" aria-pressed="false">RU → EN</button>
+      </div>
+    </div>
+    <div class="chips" id="filters"></div>
+    <div class="row">
+      <input class="search" id="search" type="search" placeholder="Поиск по слову или переводу" autocomplete="off">
+      <label class="toggle"><input type="checkbox" id="hide-known"> скрыть выученные</label>
+    </div>
+  </div>
+
+  <main id="view"></main>
+
+  <section class="tips">
+    <h2>Как учить</h2>
+    <ol>
+      <li><b>10–15 новых слов в день.</b> Начните с подсписка 1: он покрывает больше всего академических текстов.</li>
+      <li><b>Карточки, потом тест.</b> Сначала EN → RU, затем RU → EN: активный перевод запоминается крепче.</li>
+      <li><b>Своё предложение.</b> Для каждого слова напишите пример о своей жизни или учёбе.</li>
+      <li><b>Повторение через 1, 3, 7 и 14 дней.</b> Включите «скрыть выученные», чтобы видеть только трудные слова.</li>
+    </ol>
+  </section>
+</div>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  const SPEAK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>';
+
+  // ---- data ----
+  const awl = [];
+  Object.keys(window.AWL).forEach(n => {
+    window.AWL[n].trim().split("\n").forEach(line => {
+      const [w, tr] = line.split(" — ");
+      awl.push({ id: "a:" + w, w: w.trim(), tr: tr.trim(), group: String(n), tag: "AWL " + n });
+    });
+  });
+  const pv = window.PV.trim().split("\n").map(line => {
+    const p = line.split("|").map(s => s.trim());
+    return { id: "p:" + p[0], w: p[0], tr: p[1], ex: p[2], group: p[3] === "A" ? "acad" : "daily", tag: p[3] === "A" ? "academic" : "" };
+  });
+  const decks = { awl, pv };
+
+  // ---- persisted per-viewer state ----
+  let known = new Set();
+  try { known = new Set(JSON.parse(localStorage.getItem("wb-known") || "[]")); } catch (e) {}
+  const saveKnown = () => { try { localStorage.setItem("wb-known", JSON.stringify([...known])); } catch (e) {} };
+
+  const state = { deck: "awl", mode: "list", dir: "en", filter: "all", q: "", hide: false, shown: 120 };
+  try { Object.assign(state, JSON.parse(localStorage.getItem("wb-ui") || "{}"), { q: "", shown: 120 }); } catch (e) {}
+  const saveUi = () => { try { localStorage.setItem("wb-ui", JSON.stringify({ deck: state.deck, mode: state.mode, dir: state.dir, filter: state.filter, hide: state.hide })); } catch (e) {} };
+
+  const $ = id => document.getElementById(id);
+  const view = $("view");
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+  // ---- speech ----
+  let voice = null;
+  const canSpeak = "speechSynthesis" in window;
+  function pickVoice() {
+    try {
+      const vs = speechSynthesis.getVoices();
+      voice = vs.find(v => v.lang === "en-GB") || vs.find(v => v.lang && v.lang.startsWith("en")) || null;
+    } catch (e) {}
+  }
+  if (canSpeak) { pickVoice(); try { speechSynthesis.onvoiceschanged = pickVoice; } catch (e) {} }
+  function speak(text) {
+    if (!canSpeak) return;
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "en-GB"; u.rate = 0.9; if (voice) u.voice = voice;
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  const sayBtn = (text, cls) => canSpeak ? `<button class="icon ${cls || ""}" data-say="${esc(text)}" aria-label="Произнести ${esc(text)}">${SPEAK}</button>` : "";
+
+  // ---- filtering ----
+  function pool(ignoreHide) {
+    const q = state.q.toLowerCase();
+    return decks[state.deck].filter(it =>
+      (state.filter === "all" || it.group === state.filter) &&
+      (!q || it.w.toLowerCase().includes(q) || it.tr.toLowerCase().includes(q)) &&
+      (ignoreHide || !state.hide || !known.has(it.id)));
+  }
+
+  function renderFilters() {
+    const opts = state.deck === "awl"
+      ? [["all", "все 570"]].concat([1,2,3,4,5,6,7,8,9,10].map(n => [String(n), "подсписок " + n]))
+      : [["all", "все " + pv.length], ["acad", "академические"], ["daily", "разговорные"]];
+    if (!opts.some(o => o[0] === state.filter)) state.filter = "all";
+    $("filters").innerHTML = opts.map(([v, l]) => `<button class="chip" data-filter="${v}" aria-pressed="${state.filter === v}">${l}</button>`).join("");
+  }
+
+  function renderStats() {
+    for (const k of ["awl", "pv"]) {
+      const total = decks[k].length, n = decks[k].filter(it => known.has(it.id)).length;
+      $("stat-" + k).textContent = `${n} / ${total} выучено`;
+      $("bar-" + k).style.width = (100 * n / total) + "%";
+      $("deck-" + k).setAttribute("aria-pressed", state.deck === k);
+    }
+    document.querySelectorAll("#modes button").forEach(b => b.setAttribute("aria-pressed", b.dataset.mode === state.mode));
+    document.querySelectorAll("#dirs button").forEach(b => b.setAttribute("aria-pressed", b.dataset.dir === state.dir));
+    $("dirs").hidden = state.mode === "list";
+    $("hide-known").checked = state.hide;
+  }
+
+  // ---- list ----
+  function renderList() {
+    const items = pool();
+    if (!items.length) { view.innerHTML = `<div class="list"><div class="empty">Ничего не найдено. Измените поиск или фильтр.</div></div>`; return; }
+    const slice = items.slice(0, state.shown);
+    view.innerHTML = `<div class="stage">
+      <div class="count">${items.length} ${plural(items.length)}</div>
+      <div class="list">${slice.map(it => `
+        <div class="item${known.has(it.id) ? " known" : ""}">
+          <div class="head"><span class="w">${esc(it.w)}</span><span class="tr">${esc(it.tr)}</span>${it.tag ? `<span class="tag">${esc(it.tag)}</span>` : ""}</div>
+          <div class="acts">${sayBtn(it.ex ? it.w + ". " + it.ex : it.w)}<button class="know" data-know="${esc(it.id)}" aria-pressed="${known.has(it.id)}">${known.has(it.id) ? "знаю ✓" : "знаю"}</button></div>
+          ${it.ex ? `<div class="ex">${esc(it.ex)}</div>` : ""}
+        </div>`).join("")}</div>
+      ${items.length > state.shown ? `<button class="more" id="more">Показать ещё ${Math.min(120, items.length - state.shown)}</button>` : ""}
+    </div>`;
+  }
+  function plural(n) {
+    const a = n % 10, b = n % 100;
+    if (a === 1 && b !== 11) return "слово";
+    if (a >= 2 && a <= 4 && (b < 12 || b > 14)) return "слова";
+    return "слов";
+  }
+
+  // ---- cards ----
+  let deckOrder = [], cardIdx = 0, flipped = false;
+  function newCardRun() { deckOrder = shuffle(pool()); cardIdx = 0; flipped = false; }
+  function renderCards() {
+    if (!deckOrder.length) { view.innerHTML = `<div class="list"><div class="empty">Все слова в этой подборке отмечены как выученные. Снимите «скрыть выученные» или выберите другой подсписок.</div></div>`; return; }
+    if (cardIdx >= deckOrder.length) {
+      view.innerHTML = `<div class="q"><div class="prompt">Круг пройден</div><p style="text-align:center;margin:0;color:var(--muted)">${deckOrder.length} карточек. Слова, отмеченные «не знаю», останутся в следующем круге.</p><button class="btn yes" id="again">Новый круг</button></div>`;
+      return;
+    }
+    const it = deckOrder[cardIdx];
+    const front = state.dir === "en" ? it.w : it.tr;
+    const showEn = state.dir === "en" ? !flipped : flipped;
+    const main = flipped ? (state.dir === "en" ? it.tr : it.w) : front;
+    const sub = flipped && it.ex ? it.ex : "";
+    view.innerHTML = `<div class="stage">
+      <div class="card${flipped ? " back" : ""}" id="card" tabindex="0" role="button" aria-label="Перевернуть карточку">
+        ${it.tag ? `<span class="tag corner">${esc(it.tag)}</span>` : ""}
+        ${showEn ? sayBtn(it.ex && flipped ? it.w + ". " + it.ex : it.w, "say") : ""}
+        <div class="big">${esc(main)}</div>
+        ${sub ? `<div class="sub">${esc(sub)}</div>` : ""}
+        <div class="hint">${flipped ? "" : "нажмите, чтобы увидеть ответ · пробел"}</div>
+      </div>
+      <div class="pos">${cardIdx + 1} / ${deckOrder.length}</div>
+      <div class="btns">
+        <button class="btn no" id="c-no">Не знаю</button>
+        <button class="btn yes" id="c-yes">Знаю</button>
+      </div>
+    </div>`;
+  }
+  function answerCard(ok) {
+    const it = deckOrder[cardIdx];
+    if (ok) known.add(it.id); else known.delete(it.id);
+    saveKnown(); cardIdx++; flipped = false; renderStats(); renderCards();
+  }
+
+  // ---- quiz ----
+  let quiz = null;
+  function newQuiz() {
+    const p = pool();
+    quiz = { order: shuffle(p), i: 0, right: 0, done: 0, picked: null, opts: [] };
+    makeOpts();
+  }
+  function makeOpts() {
+    const it = quiz.order[quiz.i]; if (!it) return;
+    const others = shuffle(decks[state.deck].filter(x => x.id !== it.id)).slice(0, 3);
+    quiz.opts = shuffle([it].concat(others));
+    quiz.picked = null;
+  }
+  function renderQuiz() {
+    if (!quiz.order.length) { view.innerHTML = `<div class="list"><div class="empty">В этой подборке нет слов для теста.</div></div>`; return; }
+    if (quiz.i >= quiz.order.length) {
+      view.innerHTML = `<div class="q"><div class="prompt">${quiz.right} из ${quiz.done}</div><button class="btn yes" id="q-restart">Пройти ещё раз</button></div>`;
+      return;
+    }
+    const it = quiz.order[quiz.i];
+    const ask = state.dir === "en" ? it.w : it.tr;
+    view.innerHTML = `<div class="q">
+      <div class="score"><span>вопрос ${quiz.i + 1} / ${quiz.order.length}</span><span>верно ${quiz.right} / ${quiz.done}</span></div>
+      <div class="prompt">${esc(ask)}</div>
+      ${state.dir === "en" ? `<div style="text-align:center">${sayBtn(it.w)}</div>` : ""}
+      <div class="opts">${quiz.opts.map((o, k) => {
+        let cls = "";
+        if (quiz.picked !== null) { if (o.id === it.id) cls = " right"; else if (k === quiz.picked) cls = " wrong"; }
+        return `<button class="opt${cls}" data-opt="${k}" ${quiz.picked !== null ? "disabled" : ""}>${esc(state.dir === "en" ? o.tr : o.w)}</button>`;
+      }).join("")}</div>
+      ${quiz.picked !== null && it.ex ? `<div class="ex" style="text-align:center">${esc(it.ex)}</div>` : ""}
+      ${quiz.picked !== null ? `<button class="btn yes" id="q-next">Дальше</button>` : ""}
+    </div>`;
+  }
+
+  // ---- render ----
+  function render(reset) {
+    renderFilters(); renderStats(); saveUi();
+    if (state.mode === "list") renderList();
+    else if (state.mode === "cards") { if (reset) newCardRun(); renderCards(); }
+    else { if (reset || !quiz) newQuiz(); renderQuiz(); }
+  }
+
+  // ---- events ----
+  $("decks").addEventListener("click", e => { const b = e.target.closest("[data-deck]"); if (!b) return; state.deck = b.dataset.deck; state.filter = "all"; state.shown = 120; render(true); });
+  $("modes").addEventListener("click", e => { const b = e.target.closest("[data-mode]"); if (!b) return; state.mode = b.dataset.mode; render(true); });
+  $("dirs").addEventListener("click", e => { const b = e.target.closest("[data-dir]"); if (!b) return; state.dir = b.dataset.dir; render(true); });
+  $("filters").addEventListener("click", e => { const b = e.target.closest("[data-filter]"); if (!b) return; state.filter = b.dataset.filter; state.shown = 120; render(true); });
+  $("search").addEventListener("input", e => { state.q = e.target.value; state.shown = 120; render(true); });
+  $("hide-known").addEventListener("change", e => { state.hide = e.target.checked; render(true); });
+
+  view.addEventListener("click", e => {
+    const say = e.target.closest("[data-say]");
+    if (say) { e.stopPropagation(); speak(say.dataset.say); return; }
+    const k = e.target.closest("[data-know]");
+    if (k) {
+      const id = k.dataset.know; known.has(id) ? known.delete(id) : known.add(id); saveKnown();
+      const row = k.closest(".item"); const on = known.has(id);
+      k.setAttribute("aria-pressed", on); k.textContent = on ? "знаю ✓" : "знаю"; row.classList.toggle("known", on);
+      renderStats(); return;
+    }
+    if (e.target.id === "more") { state.shown += 120; renderList(); return; }
+    if (e.target.closest("#card")) { flipped = !flipped; renderCards(); return; }
+    if (e.target.id === "c-yes") return answerCard(true);
+    if (e.target.id === "c-no") return answerCard(false);
+    if (e.target.id === "again") { newCardRun(); renderCards(); return; }
+    const o = e.target.closest("[data-opt]");
+    if (o && quiz.picked === null) {
+      quiz.picked = +o.dataset.opt; quiz.done++;
+      const it = quiz.order[quiz.i];
+      if (quiz.opts[quiz.picked].id === it.id) quiz.right++;
+      if (state.dir === "en") speak(it.w);
+      renderQuiz(); return;
+    }
+    if (e.target.id === "q-next") { quiz.i++; makeOpts(); renderQuiz(); return; }
+    if (e.target.id === "q-restart") { newQuiz(); renderQuiz(); }
+  });
+
+  document.addEventListener("keydown", e => {
+    if (state.mode !== "cards" || e.target.tagName === "INPUT") return;
+    if (e.key === " ") { e.preventDefault(); flipped = !flipped; renderCards(); }
+    else if (e.key === "ArrowRight" && deckOrder[cardIdx]) answerCard(true);
+    else if (e.key === "ArrowLeft" && deckOrder[cardIdx]) answerCard(false);
+  });
+
+  render(true);
+})();
+</script>
