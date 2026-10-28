@@ -1,0 +1,164 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speaking Club Cards</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: 'Nunito', 'Noto Sans', Arial, sans-serif; color: #1E1B33; background: #ddd; }
+.page { width: 210mm; height: 297mm; padding: 11mm 11mm 10mm; background: #fff; margin: 0 auto 8mm;
+  display: flex; flex-direction: column; page-break-after: always; overflow: hidden; }
+header { border-left: 6px solid var(--c); padding-left: 10px; margin-bottom: 6mm; }
+.tag { display: inline-block; background: var(--c); color: #fff; font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .08em; padding: 2px 8px; border-radius: 20px; }
+h1 { font-family: 'Fredoka', 'Nunito', sans-serif; font-size: 28px; margin: 3px 0 2px; color: var(--c); }
+.sub { margin: 0; font-size: 12px; color: #555; }
+.grid { flex: 1; display: grid; gap: 0; border: 1.5px dashed #aaa; }
+.card { border: 1.5px dashed #aaa; padding: 10px 12px; display: flex; flex-direction: column; justify-content: center;
+  align-items: center; text-align: center; position: relative; }
+.lbl { position: absolute; top: 6px; left: 8px; font-size: 8.5px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--c); }
+.big { font-family: 'Fredoka', 'Nunito', sans-serif; font-size: 19px; font-weight: 700; line-height: 1.15; }
+.small { margin-top: 8px; font-size: 12px; color: #555; font-style: italic; }
+.half { flex: 1; border: 2px solid var(--c); border-radius: 14px; padding: 9mm 10mm; display: flex; flex-direction: column; }
+.hhead { font-family: 'Fredoka', sans-serif; font-size: 24px; font-weight: 700; color: var(--c); }
+.hint { font-size: 12.5px; margin: 4px 0 8px; }
+.cut { text-align: center; color: #999; margin: 4mm 0; font-size: 12px; white-space: nowrap; overflow: hidden; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.tbl th { background: var(--c); color: #fff; text-align: left; padding: 4px 8px; }
+.tbl td { border-bottom: 1px solid #ddd; padding: 5px 8px; }
+.tbl td.name { width: 32%; border-left: 1px solid #ddd; }
+.bingo { flex: 1; display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr); gap: 5px; }
+.bcell { border: 2px solid var(--c); border-radius: 10px; padding: 6px; display: flex; flex-direction: column;
+  justify-content: space-between; text-align: center; font-weight: 700; font-size: 13.5px; }
+.bline { font-weight: 400; font-size: 11px; color: #777; }
+.role { border: 1.5px dashed #aaa; padding: 10px 14px; position: relative; }
+.rtag { display: inline-block; background: var(--rc); color: #fff; font-weight: 800; font-size: 11px; padding: 2px 10px; border-radius: 20px; }
+.rwho { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 15px; margin: 5px 0 3px; }
+.role ul { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.45; }
+.poster { flex: 1; border: 3px solid var(--c); border-radius: 18px; padding: 8mm; display: flex; flex-direction: column; gap: 4mm; }
+.ptitle { font-family: 'Fredoka', sans-serif; font-size: 34px; font-weight: 700; text-align: center; color: var(--c); }
+.prow { font-size: 15px; }
+.pbox { flex: 2; border: 2px solid #eee; border-radius: 12px; padding: 8px 12px; display: flex; flex-direction: column; font-size: 15px; }
+.pbox.short { flex: 1; }
+.lines { flex: 1; background: repeating-linear-gradient(transparent 0 26px, #ccc 26px 27px); }
+.vote { text-align: center; font-size: 20px; letter-spacing: 4px; }
+.ticket { align-items: stretch; text-align: left; justify-content: space-evenly; padding-top: 22px; }
+.tline { font-size: 13px; line-height: 1.9; }
+.tline b { display: inline-block; width: 24px; height: 24px; border-radius: 50%; background: var(--c); color: #fff; text-align: center; line-height: 24px; margin-right: 6px; }
+.rescue { align-items: flex-start; text-align: left; padding: 26px 18px 12px; }
+.rescue ul { margin: 0; padding-left: 20px; font-size: 16px; line-height: 1.75; font-weight: 600; }
+.cert { flex: 1; border: 6px double var(--c); border-radius: 16px; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; text-align: center; padding: 6mm; background: linear-gradient(135deg,#fff 0%,#f4f0ff 100%); }
+.cstar { font-size: 40px; }
+.ctitle { font-family: 'Fredoka', sans-serif; font-size: 38px; font-weight: 700; color: var(--c); letter-spacing: .06em; text-transform: uppercase; }
+.csub { font-size: 14px; color: #555; margin: 3px 0; }
+.cname { font-size: 20px; margin: 8px 0; }
+.cbig { font-family: 'Fredoka', sans-serif; font-size: 28px; font-weight: 700; color: #F2A31B; margin: 4px 0 8px; }
+.csign { display: flex; gap: 40px; margin-top: 14px; font-size: 13px; }
+@media print { body { background: #fff; } .page { margin: 0; } }
+</style></head><body>
+<section class="page" style="--c:#7B4DFF">
+  <header><span class="tag">Lesson 1 · Warm-up</span><h1>Find someone who…</h1>
+  <p class="sub">Раздаточный лист: 2 на страницу, разрезать по линии</p></header>
+  <div class='half'><div class='hhead'>🔍 Find someone who…</div><p class='hint'>Ask: <b>Do you…?</b> &nbsp; Answer: <b>Yes, I do / No, I don't.</b></p><table class='tbl'><tr><th>Question</th><th>Name</th></tr><tr><td>Find someone who <b>drinks coffee every morning</b></td><td class='name'></td></tr><tr><td>Find someone who <b>has worked at this school for more than 10 years</b></td><td class='name'></td></tr><tr><td>Find someone who <b>likes Mondays</b></td><td class='name'></td></tr><tr><td>Find someone who <b>has a pet</b></td><td class='name'></td></tr><tr><td>Find someone who <b>can play a musical instrument</b></td><td class='name'></td></tr><tr><td>Find someone who <b>went to the sea last summer</b></td><td class='name'></td></tr><tr><td>Find someone who <b>can cook a cake</b></td><td class='name'></td></tr><tr><td>Find someone who <b>gets up before 6 o&#x27;clock</b></td><td class='name'></td></tr><tr><td>Find someone who <b>has a brother or a sister</b></td><td class='name'></td></tr><tr><td>Find someone who <b>likes sport</b></td><td class='name'></td></tr></table></div><div class='cut'>✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</div><div class='half'><div class='hhead'>🔍 Find someone who…</div><p class='hint'>Ask: <b>Do you…?</b> &nbsp; Answer: <b>Yes, I do / No, I don't.</b></p><table class='tbl'><tr><th>Question</th><th>Name</th></tr><tr><td>Find someone who <b>drinks coffee every morning</b></td><td class='name'></td></tr><tr><td>Find someone who <b>has worked at this school for more than 10 years</b></td><td class='name'></td></tr><tr><td>Find someone who <b>likes Mondays</b></td><td class='name'></td></tr><tr><td>Find someone who <b>has a pet</b></td><td class='name'></td></tr><tr><td>Find someone who <b>can play a musical instrument</b></td><td class='name'></td></tr><tr><td>Find someone who <b>went to the sea last summer</b></td><td class='name'></td></tr><tr><td>Find someone who <b>can cook a cake</b></td><td class='name'></td></tr><tr><td>Find someone who <b>gets up before 6 o&#x27;clock</b></td><td class='name'></td></tr><tr><td>Find someone who <b>has a brother or a sister</b></td><td class='name'></td></tr><tr><td>Find someone who <b>likes sport</b></td><td class='name'></td></tr></table></div>
+</section>
+<section class="page" style="--c:#16797E">
+  <header><span class="tag">Lesson 1 · Activity 1</span><h1>Speed Meeting</h1>
+  <p class="sub">Вопросы для пар: 2 минуты, потом смена партнёра. Реакции: <b>Really? · Me too! · That's interesting! · Cool!</b></p></header>
+  <div class="grid " style="grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr)"><div class="card"><span class="lbl">Speed Meeting</span><div class="big">What do you teach?</div><div class="small">I teach …</div></div><div class="card"><span class="lbl">Speed Meeting</span><div class="big">How long have you worked here?</div><div class="small">I have worked here for … years.</div></div><div class="card"><span class="lbl">Speed Meeting</span><div class="big">What is your favourite class?</div><div class="small">My favourite class is …</div></div><div class="card"><span class="lbl">Speed Meeting</span><div class="big">What do you do after work?</div><div class="small">After work I …</div></div><div class="card"><span class="lbl">Speed Meeting</span><div class="big">Coffee or tea?</div><div class="small">I prefer …</div></div><div class="card"><span class="lbl">Speed Meeting</span><div class="big">Why did you become a teacher?</div><div class="small">Because …</div></div><div class="card"><span class="lbl">Speed Meeting</span><div class="big">What is your favourite holiday?</div><div class="small">My favourite holiday is …</div></div><div class="card"><span class="lbl">Speed Meeting</span><div class="big">What do you like about our school?</div><div class="small">I like …</div></div><div class="card"><span class="lbl">Speed Meeting</span><div class="big">Where do you live?</div><div class="small">I live in …</div></div><div class="card"><span class="lbl">Speed Meeting</span><div class="big">What is your hobby?</div><div class="small">My hobby is …</div></div><div class="card"><span class="lbl">Speed Meeting</span><div class="big">What was your favourite subject at school?</div><div class="small">It was …</div></div><div class="card"><span class="lbl">Speed Meeting</span><div class="big">Where do you want to travel?</div><div class="small">I want to go to …</div></div></div>
+</section>
+<section class="page" style="--c:#F2A31B">
+  <header><span class="tag">Lesson 1 · Activity 2</span><h1>Guess My Subject</h1>
+  <p class="sub">Тяни карточку и опиши предмет, НЕ называя его: <b>In my lessons students … / We use … / We learn about …</b></p></header>
+  <div class="grid " style="grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr)"><div class="card"><span class="lbl">Guess My Subject</span><div class="big">Maths</div><div class="small">count · numbers · problems</div></div><div class="card"><span class="lbl">Guess My Subject</span><div class="big">History</div><div class="small">past · kings · wars · dates</div></div><div class="card"><span class="lbl">Guess My Subject</span><div class="big">Geography</div><div class="small">maps · countries · rivers</div></div><div class="card"><span class="lbl">Guess My Subject</span><div class="big">Biology</div><div class="small">plants · animals · the body</div></div><div class="card"><span class="lbl">Guess My Subject</span><div class="big">Chemistry</div><div class="small">experiments · water · elements</div></div><div class="card"><span class="lbl">Guess My Subject</span><div class="big">Physics</div><div class="small">light · energy · speed</div></div><div class="card"><span class="lbl">Guess My Subject</span><div class="big">Literature</div><div class="small">books · poems · writers</div></div><div class="card"><span class="lbl">Guess My Subject</span><div class="big">PE</div><div class="small">run · jump · play games</div></div><div class="card"><span class="lbl">Guess My Subject</span><div class="big">Art</div><div class="small">draw · paint · colours</div></div><div class="card"><span class="lbl">Guess My Subject</span><div class="big">Music</div><div class="small">sing · listen · instruments</div></div><div class="card"><span class="lbl">Guess My Subject</span><div class="big">IT</div><div class="small">computers · programs · the Internet</div></div><div class="card"><span class="lbl">Guess My Subject</span><div class="big">English</div><div class="small">words · speak · grammar</div></div></div>
+</section>
+<section class="page" style="--c:#2B8BD9">
+  <header><span class="tag">Lesson 1 · Activity 3</span><h1>Classroom English &amp; Teacher Says</h1>
+  <p class="sub">Карточки-команды: ведущий тянет карточку и говорит <b>«Teacher says…»</b>. Без этих слов команду не выполняем!</p></header>
+  <div class="grid " style="grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr)"><div class="card"><span class="lbl">Classroom English</span><div class="big">Good morning, everyone!</div><div class="small">Доброе утро, все!</div></div><div class="card"><span class="lbl">Classroom English</span><div class="big">Let's start!</div><div class="small">Давайте начнём!</div></div><div class="card"><span class="lbl">Classroom English</span><div class="big">Open your books, please.</div><div class="small">Откройте книги.</div></div><div class="card"><span class="lbl">Classroom English</span><div class="big">Work in pairs / in groups.</div><div class="small">Работайте в парах / группах.</div></div><div class="card"><span class="lbl">Classroom English</span><div class="big">Listen carefully.</div><div class="small">Слушайте внимательно.</div></div><div class="card"><span class="lbl">Classroom English</span><div class="big">Any questions?</div><div class="small">Есть вопросы?</div></div><div class="card"><span class="lbl">Classroom English</span><div class="big">Well done! / Great job!</div><div class="small">Молодцы! / Отлично!</div></div><div class="card"><span class="lbl">Classroom English</span><div class="big">Be quiet, please.</div><div class="small">Тише, пожалуйста.</div></div><div class="card"><span class="lbl">Classroom English</span><div class="big">Time is up!</div><div class="small">Время вышло!</div></div><div class="card"><span class="lbl">Classroom English</span><div class="big">See you next time!</div><div class="small">До встречи!</div></div><div class="card"><span class="lbl">Classroom English</span><div class="big">Stand up / Sit down.</div><div class="small">Встаньте / Сядьте.</div></div><div class="card"><span class="lbl">Classroom English</span><div class="big">Raise your hand.</div><div class="small">Поднимите руку.</div></div></div>
+</section>
+<section class="page" style="--c:#E5533D">
+  <header><span class="tag">Lesson 1 · Activity 4</span><h1>Hot Seat</h1>
+  <p class="sub">Вопросы для «горячего стула». Отвечаем полными предложениями!</p></header>
+  <div class="grid " style="grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr)"><div class="card"><span class="lbl">Hot Seat 🔥</span><div class="big">What is your favourite food?</div></div><div class="card"><span class="lbl">Hot Seat 🔥</span><div class="big">Where were you born?</div></div><div class="card"><span class="lbl">Hot Seat 🔥</span><div class="big">What makes you happy at work?</div></div><div class="card"><span class="lbl">Hot Seat 🔥</span><div class="big">What is your favourite film?</div></div><div class="card"><span class="lbl">Hot Seat 🔥</span><div class="big">Do you have a pet?</div></div><div class="card"><span class="lbl">Hot Seat 🔥</span><div class="big">What can you do very well?</div></div><div class="card"><span class="lbl">Hot Seat 🔥</span><div class="big">What is your favourite season? Why?</div></div><div class="card"><span class="lbl">Hot Seat 🔥</span><div class="big">What did you do last weekend?</div></div><div class="card"><span class="lbl">Hot Seat 🔥</span><div class="big">Who is your hero?</div></div><div class="card"><span class="lbl">Hot Seat 🔥</span><div class="big">What is your dream?</div></div><div class="card"><span class="lbl">Hot Seat 🔥</span><div class="big">What music do you like?</div></div><div class="card"><span class="lbl">Hot Seat 🔥</span><div class="big">What is your favourite place in our town?</div></div></div>
+</section>
+<section class="page" style="--c:#2DA160">
+  <header><span class="tag">Lesson 2 · Activity 1</span><h1>School Tour</h1>
+  <p class="sub">Карточки «гостя»: гость тянет карточку и спрашивает «Excuse me, …», гид объясняет дорогу по схеме школы</p></header>
+  <div class="grid " style="grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr)"><div class="card"><span class="lbl">Guest card 🧳</span><div class="big">Where is the library?</div><div class="small">Go straight · Turn left / right · Go upstairs / downstairs · It's next to / opposite …</div></div><div class="card"><span class="lbl">Guest card 🧳</span><div class="big">Where is the gym?</div><div class="small">Go straight · Turn left / right · Go upstairs / downstairs · It's next to / opposite …</div></div><div class="card"><span class="lbl">Guest card 🧳</span><div class="big">Where is the canteen?</div><div class="small">Go straight · Turn left / right · Go upstairs / downstairs · It's next to / opposite …</div></div><div class="card"><span class="lbl">Guest card 🧳</span><div class="big">Where is the computer room?</div><div class="small">Go straight · Turn left / right · Go upstairs / downstairs · It's next to / opposite …</div></div><div class="card"><span class="lbl">Guest card 🧳</span><div class="big">Where is the assembly hall?</div><div class="small">Go straight · Turn left / right · Go upstairs / downstairs · It's next to / opposite …</div></div><div class="card"><span class="lbl">Guest card 🧳</span><div class="big">Where is the head teacher's office?</div><div class="small">Go straight · Turn left / right · Go upstairs / downstairs · It's next to / opposite …</div></div><div class="card"><span class="lbl">Guest card 🧳</span><div class="big">Where is the staff room?</div><div class="small">Go straight · Turn left / right · Go upstairs / downstairs · It's next to / opposite …</div></div><div class="card"><span class="lbl">Guest card 🧳</span><div class="big">Where is the Biology classroom?</div><div class="small">Go straight · Turn left / right · Go upstairs / downstairs · It's next to / opposite …</div></div><div class="card"><span class="lbl">Guest card 🧳</span><div class="big">Where are the stairs?</div><div class="small">Go straight · Turn left / right · Go upstairs / downstairs · It's next to / opposite …</div></div><div class="card"><span class="lbl">Guest card 🧳</span><div class="big">Where is the entrance?</div><div class="small">Go straight · Turn left / right · Go upstairs / downstairs · It's next to / opposite …</div></div><div class="card"><span class="lbl">Guest card 🧳</span><div class="big">Where is the school yard?</div><div class="small">Go straight · Turn left / right · Go upstairs / downstairs · It's next to / opposite …</div></div><div class="card"><span class="lbl">Guest card 🧳</span><div class="big">Where is the nurse's office?</div><div class="small">Go straight · Turn left / right · Go upstairs / downstairs · It's next to / opposite …</div></div></div>
+</section>
+<section class="page" style="--c:#E04A8C">
+  <header><span class="tag">Lesson 2 · Activity 2</span><h1>Routine Bingo</h1>
+  <p class="sub">Бланк Bingo: 2 на страницу</p></header>
+  <div class='half'><div class='hhead'>🎲 Routine Bingo</div><p class='hint'>Ask: <b>What time do you get up? Do you have breakfast?</b> Write a name in each square. Line = <b>BINGO!</b></p><div class='bingo'><div class='bcell'><div>gets up before 7</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>has breakfast every day</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>walks to school</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>drinks tea at school</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>checks homework every evening</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>has lunch in the canteen</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>goes to bed after 11</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>watches TV in the evening</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>does sport after work</div><div class='bline'>Name: ________</div></div></div></div><div class='cut'>✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</div><div class='half'><div class='hhead'>🎲 Routine Bingo</div><p class='hint'>Ask: <b>What time do you get up? Do you have breakfast?</b> Write a name in each square. Line = <b>BINGO!</b></p><div class='bingo'><div class='bcell'><div>gets up before 7</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>has breakfast every day</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>walks to school</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>drinks tea at school</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>checks homework every evening</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>has lunch in the canteen</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>goes to bed after 11</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>watches TV in the evening</div><div class='bline'>Name: ________</div></div><div class='bcell'><div>does sport after work</div><div class='bline'>Name: ________</div></div></div></div>
+</section>
+<section class="page" style="--c:#7B4DFF">
+  <header><span class="tag">Lesson 2 · Activity 3</span><h1>A Guest from Abroad</h1>
+  <p class="sub">Карточки ролей: 4 гостя + 4 хозяина. Ответы — по правде о нашей школе!</p></header>
+  <div class='grid' style='grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(4,1fr)'><div class='role' style='--rc:#7B4DFF'><div class='rtag'>GUEST 🧳</div><div class='rwho'>Emma, a Maths teacher from Finland</div><ul><li>How many students are there in your school?</li><li>What time do lessons start?</li><li>Do students wear a uniform?</li><li>What is your favourite school tradition?</li></ul></div><div class='role' style='--rc:#7B4DFF'><div class='rtag'>GUEST 🧳</div><div class='rwho'>John, a History teacher from the UK</div><ul><li>How many teachers are there?</li><li>How long is a lesson?</li><li>Do students have lunch at school?</li><li>What clubs are there?</li></ul></div><div class='role' style='--rc:#7B4DFF'><div class='rtag'>GUEST 🧳</div><div class='rwho'>Maria, a Biology teacher from Spain</div><ul><li>Is there a school garden?</li><li>How many lessons a day do students have?</li><li>When do the holidays start?</li><li>What is the most popular subject?</li></ul></div><div class='role' style='--rc:#7B4DFF'><div class='rtag'>GUEST 🧳</div><div class='rwho'>Tom, a PE teacher from Canada</div><ul><li>Is there a big gym?</li><li>What sports do students play?</li><li>Do you have school competitions?</li><li>What time does school finish?</li></ul></div><div class='role' style='--rc:#16797E'><div class='rtag'>HOST 🏫</div><div class='rwho'>You are a teacher at our school</div><ul><li>Welcome to our school!</li><li>There are … students.</li><li>Lessons start at …</li><li>Yes, they do. / No, they don't.</li><li>Our favourite tradition is …</li></ul></div><div class='role' style='--rc:#16797E'><div class='rtag'>HOST 🏫</div><div class='rwho'>You are a teacher at our school</div><ul><li>Welcome to our school!</li><li>There are … students.</li><li>Lessons start at …</li><li>Yes, they do. / No, they don't.</li><li>Our favourite tradition is …</li></ul></div><div class='role' style='--rc:#16797E'><div class='rtag'>HOST 🏫</div><div class='rwho'>You are a teacher at our school</div><ul><li>Welcome to our school!</li><li>There are … students.</li><li>Lessons start at …</li><li>Yes, they do. / No, they don't.</li><li>Our favourite tradition is …</li></ul></div><div class='role' style='--rc:#16797E'><div class='rtag'>HOST 🏫</div><div class='rwho'>You are a teacher at our school</div><ul><li>Welcome to our school!</li><li>There are … students.</li><li>Lessons start at …</li><li>Yes, they do. / No, they don't.</li><li>Our favourite tradition is …</li></ul></div></div>
+</section>
+<section class="page" style="--c:#F2A31B">
+  <header><span class="tag">Lesson 2 · Activity 4</span><h1>Our Dream School</h1>
+  <p class="sub">Шаблон постера для групп (можно перерисовать на ватман). Презентация — 1 минута</p></header>
+  
+<div class="poster">
+  <div class="ptitle">🌟 Our Dream School 🌟</div>
+  <div class="prow"><b>School name:</b> ______________________________________</div>
+  <div class="pbox"><b>In our dream school there is / there are…</b><div class="lines"></div></div>
+  <div class="pbox"><b>Students can…</b><div class="lines"></div></div>
+  <div class="pbox"><b>Teachers can…</b><div class="lines"></div></div>
+  <div class="pbox short"><b>Lessons start at … and finish at …</b><div class="lines"></div></div>
+  <div class="pbox short"><b>The best thing about our school is…</b><div class="lines"></div></div>
+  <div class="vote">Votes: ⭐ ⭐ ⭐ ⭐ ⭐ ⭐ ⭐ ⭐ ⭐ ⭐</div>
+</div>
+</section>
+<section class="page" style="--c:#16797E">
+  <header><span class="tag">Lesson 1 &amp; 2 · Reflection</span><h1>3–2–1 Exit Tickets</h1>
+  <p class="sub">Рефлексия в конце урока: 6 на страницу</p></header>
+  <div class='grid' style='grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(3,1fr)'><div class="card ticket"><span class="lbl">Exit ticket</span>
+<div class="tline"><b>3</b> new words: ____________ ____________ ____________</div>
+<div class="tline"><b>2</b> phrases I will use: ______________________ ______________________</div>
+<div class="tline"><b>1</b> question I have: ______________________________________</div></div><div class="card ticket"><span class="lbl">Exit ticket</span>
+<div class="tline"><b>3</b> new words: ____________ ____________ ____________</div>
+<div class="tline"><b>2</b> phrases I will use: ______________________ ______________________</div>
+<div class="tline"><b>1</b> question I have: ______________________________________</div></div><div class="card ticket"><span class="lbl">Exit ticket</span>
+<div class="tline"><b>3</b> new words: ____________ ____________ ____________</div>
+<div class="tline"><b>2</b> phrases I will use: ______________________ ______________________</div>
+<div class="tline"><b>1</b> question I have: ______________________________________</div></div><div class="card ticket"><span class="lbl">Exit ticket</span>
+<div class="tline"><b>3</b> new words: ____________ ____________ ____________</div>
+<div class="tline"><b>2</b> phrases I will use: ______________________ ______________________</div>
+<div class="tline"><b>1</b> question I have: ______________________________________</div></div><div class="card ticket"><span class="lbl">Exit ticket</span>
+<div class="tline"><b>3</b> new words: ____________ ____________ ____________</div>
+<div class="tline"><b>2</b> phrases I will use: ______________________ ______________________</div>
+<div class="tline"><b>1</b> question I have: ______________________________________</div></div><div class="card ticket"><span class="lbl">Exit ticket</span>
+<div class="tline"><b>3</b> new words: ____________ ____________ ____________</div>
+<div class="tline"><b>2</b> phrases I will use: ______________________ ______________________</div>
+<div class="tline"><b>1</b> question I have: ______________________________________</div></div></div>
+</section>
+<section class="page" style="--c:#E5533D">
+  <header><span class="tag">Lesson 1 &amp; 2</span><h1>Help! Phrases</h1>
+  <p class="sub">«Спасательные» фразы: положить на каждый стол</p></header>
+  <div class='grid' style='grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr)'><div class="card rescue"><span class="lbl">Help! phrases 🛟</span>
+<ul><li>How do you say … in English?</li><li>Can you repeat, please?</li><li>Sorry, I don't understand.</li>
+<li>Can you speak slowly, please?</li><li>What does … mean?</li><li>I think… / In my opinion…</li><li>Me too! / Really? / Cool!</li></ul></div><div class="card rescue"><span class="lbl">Help! phrases 🛟</span>
+<ul><li>How do you say … in English?</li><li>Can you repeat, please?</li><li>Sorry, I don't understand.</li>
+<li>Can you speak slowly, please?</li><li>What does … mean?</li><li>I think… / In my opinion…</li><li>Me too! / Really? / Cool!</li></ul></div><div class="card rescue"><span class="lbl">Help! phrases 🛟</span>
+<ul><li>How do you say … in English?</li><li>Can you repeat, please?</li><li>Sorry, I don't understand.</li>
+<li>Can you speak slowly, please?</li><li>What does … mean?</li><li>I think… / In my opinion…</li><li>Me too! / Really? / Cool!</li></ul></div><div class="card rescue"><span class="lbl">Help! phrases 🛟</span>
+<ul><li>How do you say … in English?</li><li>Can you repeat, please?</li><li>Sorry, I don't understand.</li>
+<li>Can you speak slowly, please?</li><li>What does … mean?</li><li>I think… / In my opinion…</li><li>Me too! / Really? / Cool!</li></ul></div></div>
+</section>
+<section class="page" style="--c:#7B4DFF">
+  <header><span class="tag">Lesson 2 · Final</span><h1>Certificates</h1>
+  <p class="sub">Шуточные сертификаты: 2 на страницу</p></header>
+  <div class="cert"><div class="cstar">🏆</div><div class="ctitle">Certificate</div>
+<div class="csub">This certifies that</div><div class="cname">__________________________</div>
+<div class="csub">is an</div><div class="cbig">English-Speaking Teacher</div>
+<div class="csub">Speaking Club for Teachers · 2 lessons completed</div>
+<div class="csign"><span>Date: ____________</span><span>Signature: ____________</span></div></div><div class='cut'>✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</div><div class="cert"><div class="cstar">🏆</div><div class="ctitle">Certificate</div>
+<div class="csub">This certifies that</div><div class="cname">__________________________</div>
+<div class="csub">is an</div><div class="cbig">English-Speaking Teacher</div>
+<div class="csub">Speaking Club for Teachers · 2 lessons completed</div>
+<div class="csign"><span>Date: ____________</span><span>Signature: ____________</span></div></div>
+</section></body></html>
